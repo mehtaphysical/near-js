@@ -1,0 +1,24 @@
+{
+  "name": "status-message",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel serve ./src/index.html",
+    "build": "parcel build ./src/index.html"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "browserslist": "> 0.2%",
+  "dependencies": {
+    "near-api-js": "^0.41.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@parcel/transformer-svg-react": "^2.0.0-nightly.1739",
+    "@parcel/transformer-svgo": "^2.0.0-nightly.1739",
+    "parcel": "^2.0.0-beta.3.1"
+  }
+}
