@@ -1,12 +1,26 @@
 {
   "name": "create-near-app",
   "version": "1.0.0",
-  "bin": "bin/near",
+  "bin": {
+    "create-near-app": "bin/index.js"
+  },
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "build": "ncc build ./index.ts -o ./bin/ --minify --no-cache --no-source-map-register"
+  },
   "dependencies": {
+    "chalk": "^4.1.1",
     "commander": "^8.0.0",
     "node-fetch": "^2.6.1",
-    "tar": "^6.1.0"
+    "tar": "4"
+  },
+  "devDependencies": {
+    "@types/chalk": "^2.2.0",
+    "@types/node": "^15.12.5",
+    "@types/node-fetch": "^2.5.10",
+    "@types/tar": "^4.0.4",
+    "@vercel/ncc": "^0.28.6",
+    "typescript": "^4.3.5"
   }
 }

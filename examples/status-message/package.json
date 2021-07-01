@@ -12,7 +12,7 @@
   "license": "ISC",
   "browserslist": "> 0.2%",
   "dependencies": {
-    "near-api-js": "^0.41.0",
+    "near-api-js": "latest",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },

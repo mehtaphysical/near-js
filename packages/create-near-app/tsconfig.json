@@ -1,0 +1,16 @@
+{
+  "include": ["./index.ts"],
+  "compilerOptions": {
+    "outDir": "bin",
+    "target": "ES2020",
+    "moduleResolution": "node",
+    "strict": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}
