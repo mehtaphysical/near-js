@@ -1,5 +1,6 @@
 import { WalletConnection } from "near-api-js";
 import { FinalExecutionOutcome } from "near-api-js/lib/providers";
+import { SignedTransaction } from "near-api-js/lib/transaction";
 import {
   TransactionBundleSendOptions,
   TransactionSender,
@@ -33,7 +34,18 @@ export class WalletTransactionSender implements TransactionSender {
   /**
    * @see {@link TransactionSender.send}
    */
-  async send({
+  async send(
+    signedTransaction: SignedTransaction
+  ): Promise<FinalExecutionOutcome> {
+    return this.wallet._near.connection.provider.sendTransaction(
+      signedTransaction
+    );
+  }
+
+  /**
+   * @see {@link TransactionSender.createSignAndSend}
+   */
+  createSignAndSend({
     transactionOptions,
   }: TransactionSendOptions): Promise<FinalExecutionOutcome> {
     // @ts-ignore
@@ -44,9 +56,9 @@ export class WalletTransactionSender implements TransactionSender {
   }
 
   /**
-   * @see {@link TransactionSender.bundleSend}
+   * @see {@link TransactionSender.bundleCreateSignAndSend}
    */
-  async bundleSend({
+  async bundleCreateSignAndSend({
     bundleTransactionOptions,
     transactionCreator,
   }: TransactionBundleSendOptions): Promise<FinalExecutionOutcome[]> {

@@ -25,13 +25,10 @@ import { KeyStoreTransactionSigner } from "../signer";
 export class MockProvider implements Provider {
   async query() {
     return {
-      public_key: "ed215519:helloKEY",
-      access_key: {
-        nonce: 345,
-        permission: "FullAccess",
-      },
+      nonce: 345,
+      permission: "FullAccess",
       block_height: 1,
-      block_hash: "abcd1234abcd1234abcd1234abcd1234",
+      block_hash: "CCLc18qkRTKi4SUB6BPxixzgNyzVy6n7W1x8LxE3Fxv4",
     };
   }
 

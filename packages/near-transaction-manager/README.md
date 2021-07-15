@@ -53,13 +53,13 @@ const signedTransaction = await transactionManager.createSignedTransaction({
 });
 
 // create, sign, and send a transaction
-const outcome = await transactionManager.signAndSendTransaction({
+const outcome = await transactionManager.createSignAndSendTransaction({
   receiverId: "example.testnet",
   actions: [functionCall("method", {}, DEFAULT_FUNCTION_CALL_GAS, [])],
 });
 
 // create, sign, and send many transactions
-const outcomes = await transactionManager.signAndSendTransactions([
+const outcomes = await transactionManager.bundleCreateSignAndSendTransactions([
   {
     receiverId: "example.testnet",
     actions: [functionCall("method1", {}, DEFAULT_FUNCTION_CALL_GAS, [])],

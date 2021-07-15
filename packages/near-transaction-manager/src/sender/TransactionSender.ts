@@ -1,4 +1,5 @@
 import { FinalExecutionOutcome } from "near-api-js/lib/providers/provider";
+import { SignedTransaction } from "near-api-js/lib/transaction";
 import {
   CreateTransactionOptions,
   TransactionCreator,
@@ -45,14 +46,21 @@ export type TransactionBundleSendOptions = {
  */
 export interface TransactionSender {
   /**
+   * Send a signed transaction to the NEAR network.
+   */
+  send(signedTransaction: SignedTransaction): Promise<FinalExecutionOutcome>;
+
+  /**
    * Creates, signs, and sends a transaction to the NEAR network.
    */
-  send(options: TransactionSendOptions): Promise<FinalExecutionOutcome>;
+  createSignAndSend(
+    options: TransactionSendOptions
+  ): Promise<FinalExecutionOutcome>;
 
   /**
    * Creates, signs, and seirially sends many transaction to teh NEAR network.
    */
-  bundleSend(
+  bundleCreateSignAndSend(
     options: TransactionBundleSendOptions
   ): Promise<FinalExecutionOutcome[]>;
 }

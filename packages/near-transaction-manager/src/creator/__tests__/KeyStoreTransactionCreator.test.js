@@ -28,7 +28,7 @@ describe("KeyStoreTransactionCreator", () => {
     });
     expect(transaction).toEqual({
       actions: [createAccount()],
-      blockHash: "abcd1234abcd1234abcd1234abcd1234",
+      blockHash: expect.any(Uint8Array),
       nonce: 346,
       publicKey: keyPair.getPublicKey(),
       receiverId: "test.testnet",
@@ -44,7 +44,7 @@ describe("KeyStoreTransactionCreator", () => {
     });
     expect(transaction).toEqual({
       actions: [createAccount()],
-      blockHash: "abcd1234abcd1234abcd1234abcd1234",
+      blockHash: expect.any(Uint8Array),
       nonce: 355,
       publicKey: keyPair.getPublicKey(),
       receiverId: "test.testnet",

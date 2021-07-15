@@ -1,6 +1,6 @@
 {
-  "name": "near-transaction-mangager",
-  "version": "0.0.1",
+  "name": "near-transaction-manager",
+  "version": "0.0.4",
   "description": "",
   "types": "dist",
   "main": "dist/index.cjs.js",
@@ -23,6 +23,7 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@rollup/plugin-typescript": "^8.2.1",
+    "@types/bs58": "^4.0.1",
     "@types/jest": "^26.0.24",
     "jest": "^27.0.6",
     "near-api-js": "^0.42.0",
@@ -34,5 +35,8 @@
   },
   "peerDependencies": {
     "near-api-js": "^0.42.0"
+  },
+  "dependencies": {
+    "bs58": "^4.0.1"
   }
 }

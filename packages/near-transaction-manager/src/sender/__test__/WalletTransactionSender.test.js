@@ -15,22 +15,43 @@ const mockWallet = {
     return mockAccount;
   },
   requestSignTransactions: jest.fn(),
+  _near: {
+    connection: {
+      provider: {
+        sendTransaction: jest.fn(),
+      },
+    },
+  },
 };
 
 describe("WalletTransactionSender", () => {
+  const transactionCreator = createTestTransactionCreator();
+  const transactionSigner = createTestTranasctionSigner();
+  const sender = new WalletTransactionSender({
+    wallet: mockWallet,
+  });
+
   beforeEach(() => {
     mockAccount.signAndSendTransaction.mockClear();
     mockWallet.requestSignTransactions.mockClear();
   });
-  it("sends a transaction using a provider", async () => {
-    const sender = new WalletTransactionSender({
-      wallet: mockWallet,
+
+  it("sends a transaction using a WalletConnections", async () => {
+    const transaction = await transactionCreator.create({
+      receiverId: "test.testnet",
+      actions: [createAccount()],
     });
+    const signedTransaction = await transactionSigner.sign({ transaction });
 
-    const transactionCreator = createTestTransactionCreator();
-    const transactionSigner = createTestTranasctionSigner();
+    await sender.send(signedTransaction);
 
-    await sender.send({
+    expect(
+      mockWallet._near.connection.provider.sendTransaction
+    ).toHaveBeenCalledWith(signedTransaction);
+  });
+
+  it("creates, signs, and sends a transaction using a WalletConnection", async () => {
+    await sender.createSignAndSend({
       transactionCreator,
       transactionSigner,
       transactionOptions: {
@@ -46,15 +67,8 @@ describe("WalletTransactionSender", () => {
     });
   });
 
-  it("sends a transaction using a provider", async () => {
-    const sender = new WalletTransactionSender({
-      wallet: mockWallet,
-    });
-
-    const transactionCreator = createTestTransactionCreator();
-    const transactionSigner = createTestTranasctionSigner();
-
-    await sender.bundleSend({
+  it("it creates, signs, and sends many transactions using a WalletConnection", async () => {
+    await sender.bundleCreateSignAndSend({
       transactionCreator,
       transactionSigner,
       bundleTransactionOptions: [
@@ -78,7 +92,7 @@ describe("WalletTransactionSender", () => {
       transactions: [
         {
           actions: [createAccount()],
-          blockHash: "abcd1234abcd1234abcd1234abcd1234",
+          blockHash: expect.any(Uint8Array),
           nonce: 346,
           publicKey: {
             data: new Uint8Array([
@@ -93,7 +107,7 @@ describe("WalletTransactionSender", () => {
         },
         {
           actions: [deleteAccount()],
-          blockHash: "abcd1234abcd1234abcd1234abcd1234",
+          blockHash: expect.any(Uint8Array),
           nonce: 347,
           publicKey: {
             data: new Uint8Array([
@@ -108,7 +122,7 @@ describe("WalletTransactionSender", () => {
         },
         {
           actions: [createAccount()],
-          blockHash: "abcd1234abcd1234abcd1234abcd1234",
+          blockHash: expect.any(Uint8Array),
           nonce: 348,
           publicKey: {
             data: new Uint8Array([

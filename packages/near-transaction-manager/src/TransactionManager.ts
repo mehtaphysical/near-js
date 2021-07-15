@@ -1,6 +1,9 @@
 import { WalletConnection } from "near-api-js";
 import { FinalExecutionOutcome } from "near-api-js/lib/providers/provider";
-import { SignedTransaction, Transaction } from "near-api-js/lib/transaction";
+import {
+  SignedTransaction,
+  Transaction,
+} from "near-api-js/lib/transaction";
 import {
   TransactionCreator,
   CreateTransactionOptions,
@@ -107,20 +110,39 @@ export class TransactionManager {
   }
 
   /**
+   * Sign and send a transaction using a {@link TransactionSender}.
+   */
+  async sendTransaction(
+    transaction: Transaction
+  ): Promise<FinalExecutionOutcome> {
+    const signedTransaction = await this.signTransaction(transaction);
+    return this.sendSignedTransaction(signedTransaction);
+  }
+
+  /**
+   * Send a signed transaction using a {@link TransactionSender}.
+   */
+  sendSignedTransaction(
+    signedTransaction: SignedTransaction
+  ): Promise<FinalExecutionOutcome> {
+    return this.transactionSender.send(signedTransaction);
+  }
+
+  /**
    * Creates, signs, and sends a transaction with a {@link TransactionSender}.
    *
    * @example
    * ```ts
-   * const outcome = await transactionManager.signAndSendTransaction({
+   * const outcome = await transactionManager.createSignAndSendTransaction({
    *   receiverId: "example.testnet",
    *   actions: [functionCall("method", {}, DEFAULT_FUNCTION_CALL_GAS, [])],
    * });
    * ```
    */
-  signAndSendTransaction(
+  createSignAndSendTransaction(
     options: CreateTransactionOptions
   ): Promise<FinalExecutionOutcome> {
-    return this.transactionSender.send({
+    return this.transactionSender.createSignAndSend({
       transactionOptions: options,
       transactionCreator: this.transactionCreator,
       transactionSigner: this.transactionSigner,
@@ -132,7 +154,7 @@ export class TransactionManager {
    *
    * @example
    * ```ts
-   * const outcomes = await transactionManager.signAndSendTransactions([
+   * const outcomes = await transactionManager.bundleCreateSignAndSendTransactions([
    *   {
    *     receiverId: "example.testnet",
    *     actions: [functionCall("method1", {}, DEFAULT_FUNCTION_CALL_GAS, [])],
@@ -152,10 +174,10 @@ export class TransactionManager {
    * ]);
    * ```
    */
-  signAndSendTransactions(
+  bundleCreateSignAndSendTransactions(
     options: CreateTransactionOptions[]
   ): Promise<FinalExecutionOutcome[]> {
-    return this.transactionSender.bundleSend({
+    return this.transactionSender.bundleCreateSignAndSend({
       bundleTransactionOptions: options,
       transactionCreator: this.transactionCreator,
       transactionSigner: this.transactionSigner,

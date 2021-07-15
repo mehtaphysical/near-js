@@ -2,6 +2,7 @@ import {
   FinalExecutionOutcome,
   Provider,
 } from "near-api-js/lib/providers/provider";
+import { SignedTransaction } from "near-api-js/lib/transaction";
 import {
   TransactionBundleSendOptions,
   TransactionSender,
@@ -35,7 +36,14 @@ export class ProviderTransactionSender implements TransactionSender {
   /**
    * @see {@link TransactionSender.send}
    */
-  async send({
+  send(signedTransaction: SignedTransaction): Promise<FinalExecutionOutcome> {
+    return this.provider.sendTransaction(signedTransaction);
+  }
+
+  /**
+   * @see {@link TransactionSender.createSignAndSend}
+   */
+  async createSignAndSend({
     transactionOptions,
     transactionCreator,
     transactionSigner,
@@ -46,9 +54,9 @@ export class ProviderTransactionSender implements TransactionSender {
   }
 
   /**
-   * @see {@link TransactionSender.bundleSend}
+   * @see {@link TransactionSender.bundleCreateSignAndSend}
    */
-  async bundleSend({
+  async bundleCreateSignAndSend({
     bundleTransactionOptions,
     transactionCreator,
     transactionSigner,
@@ -57,7 +65,7 @@ export class ProviderTransactionSender implements TransactionSender {
 
     for (let [i, transactionOptions] of bundleTransactionOptions.entries()) {
       outcomes.push(
-        await this.send({
+        await this.createSignAndSend({
           transactionOptions: { ...transactionOptions, nonceOffset: i + 1 },
           transactionCreator,
           transactionSigner,

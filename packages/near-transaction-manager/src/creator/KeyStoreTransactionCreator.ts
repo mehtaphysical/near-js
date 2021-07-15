@@ -1,10 +1,7 @@
+import bs58 from 'bs58';
 import { KeyStore } from "near-api-js/lib/key_stores/keystore";
 import { Transaction } from "near-api-js/lib/transaction";
-import {
-  AccessKeyInfoView,
-  Provider,
-  QueryResponseKind,
-} from "near-api-js/lib/providers/provider";
+import { AccessKeyView, Provider } from "near-api-js/lib/providers/provider";
 import { JsonRpcProvider } from "near-api-js/lib/providers/json-rpc-provider";
 import {
   CreateTransactionOptions,
@@ -98,9 +95,7 @@ export class KeyStoreTransactionCreator implements TransactionCreator {
   }: CreateTransactionOptions): Promise<Transaction> {
     const keyPair = await this.keyStore.getKey(this.networkId, this.signerId);
     const publicKey = keyPair.getPublicKey();
-    const { access_key, block_hash } = await this.provider.query<
-      AccessKeyInfoView & QueryResponseKind
-    >({
+    const { nonce, block_hash } = await this.provider.query<AccessKeyView>({
       request_type: "view_access_key",
       account_id: this.signerId,
       public_key: publicKey.toString(),
@@ -112,8 +107,8 @@ export class KeyStoreTransactionCreator implements TransactionCreator {
       actions,
       publicKey,
       signerId: this.signerId,
-      nonce: access_key.nonce + nonceOffset,
-      blockHash: block_hash,
+      nonce: nonce + nonceOffset,
+      blockHash: bs58.decode(block_hash),
     });
   }
 
