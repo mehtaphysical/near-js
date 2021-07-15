@@ -1,16 +1,17 @@
-import { WalletConnection } from "near-api-js";
+import { Account, WalletConnection } from "near-api-js";
 import { FinalExecutionOutcome } from "near-api-js/lib/providers/provider";
-import {
-  SignedTransaction,
-  Transaction,
-} from "near-api-js/lib/transaction";
+import { SignedTransaction, Transaction } from "near-api-js/lib/transaction";
 import {
   TransactionCreator,
   CreateTransactionOptions,
   KeyStoreTransactionCreator,
 } from "./creator";
 import { TransactionSigner, KeyStoreTransactionSigner } from "./signer";
-import { TransactionSender, WalletTransactionSender } from "./sender";
+import {
+  ProviderTransactionSender,
+  TransactionSender,
+  WalletTransactionSender,
+} from "./sender";
 
 export type TransactionManagerOptions = {
   transactionCreator: TransactionCreator;
@@ -22,8 +23,13 @@ export type TransactionManagerOptions = {
  * The `TransactionManager` class is used to create, sign, and send NEAR transactions
  * with a given {@link TransactionCreator}, {@link TransactionSigner}, and {@link TransactionSender}.
  *
- * A new `TransactionManager` can be created from a NEAR `WalletConnection` or using the constructor.
+ * A new `TransactionManager` can be created from a NEAR `Account`, NEAR `WalletConnection`, or using the constructor.
  *
+ * @example
+ * ```ts
+ * const transactionManager = TransactionManager.fromAccount(account);
+ * ```
+ * 
  * @example
  * ```ts
  * const transactionManager = TransactionManager.fromWallet(wallet);
@@ -181,6 +187,19 @@ export class TransactionManager {
       bundleTransactionOptions: options,
       transactionCreator: this.transactionCreator,
       transactionSigner: this.transactionSigner,
+    });
+  }
+
+  /**
+   * Creates a new instance of `TransactionManager` with a NEAR `Account`.
+   */
+  static fromAccount(account: Account): TransactionManager {
+    return new TransactionManager({
+      transactionCreator: KeyStoreTransactionCreator.fromAccount(account),
+      transactionSigner: KeyStoreTransactionSigner.fromAccount(account),
+      transactionSender: new ProviderTransactionSender({
+        provider: account.connection.provider,
+      }),
     });
   }
 

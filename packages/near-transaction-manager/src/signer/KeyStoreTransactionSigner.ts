@@ -1,4 +1,4 @@
-import { WalletConnection } from "near-api-js";
+import { Account, WalletConnection } from "near-api-js";
 import { KeyStore } from "near-api-js/lib/key_stores/keystore";
 import { InMemorySigner, Signer } from "near-api-js/lib/signer";
 import {
@@ -73,6 +73,23 @@ export class KeyStoreTransactionSigner implements TransactionSigner {
       this.networkId
     );
     return signedTransaction;
+  }
+
+  /**
+   * Create an instance of `KeyStoreTransactionSigner` from a NEAR `Account`.
+   */
+  static fromAccount(account: Account): KeyStoreTransactionSigner {
+    if (!(account.connection.signer instanceof InMemorySigner)) {
+      throw new Error(
+        "Account doesn't use an InMemorySigner. No key store can be found."
+      );
+    }
+
+    return new KeyStoreTransactionSigner({
+      signerId: account.accountId,
+      networkId: account.connection.networkId,
+      keyStore: account.connection.signer.keyStore,
+    });
   }
 
   /**

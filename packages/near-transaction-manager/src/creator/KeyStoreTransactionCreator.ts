@@ -1,4 +1,4 @@
-import bs58 from 'bs58';
+import bs58 from "bs58";
 import { KeyStore } from "near-api-js/lib/key_stores/keystore";
 import { Transaction } from "near-api-js/lib/transaction";
 import { AccessKeyView, Provider } from "near-api-js/lib/providers/provider";
@@ -7,7 +7,7 @@ import {
   CreateTransactionOptions,
   TransactionCreator,
 } from "./TransactionCreator";
-import { WalletConnection } from "near-api-js";
+import { Account, InMemorySigner, WalletConnection } from "near-api-js";
 
 export type KeyStoreTransactionCreatorOptions = {
   /**
@@ -109,6 +109,24 @@ export class KeyStoreTransactionCreator implements TransactionCreator {
       signerId: this.signerId,
       nonce: nonce + nonceOffset,
       blockHash: bs58.decode(block_hash),
+    });
+  }
+
+  /**
+   * Create an instance of `KeyStoreTransactionCreator` from a NEAR `Account`.
+   */
+  static fromAccount(account: Account): KeyStoreTransactionCreator {
+    if (!(account.connection.signer instanceof InMemorySigner)) {
+      throw new Error(
+        "Account doesn't use an InMemorySigner. No key store can be found."
+      );
+    }
+
+    return new KeyStoreTransactionCreator({
+      signerId: account.accountId,
+      networkId: account.connection.networkId,
+      keyStore: account.connection.signer.keyStore,
+      provider: account.connection.provider,
     });
   }
 

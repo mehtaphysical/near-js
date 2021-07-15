@@ -1,6 +1,7 @@
 import resolve from "@rollup/plugin-node-resolve";
 import cjs from "@rollup/plugin-commonjs";
 import typescript from "@rollup/plugin-typescript";
+import json from "@rollup/plugin-json";
 import pkg from "./package.json";
 
 export default [
@@ -15,6 +16,6 @@ export default [
       "near-api-js/lib/transaction",
       "near-api-js/lib/signer",
     ],
-    plugins: [resolve(), cjs(), typescript()],
+    plugins: [resolve(), cjs(), json(), typescript()],
   },
 ];

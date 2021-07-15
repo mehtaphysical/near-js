@@ -10,6 +10,13 @@ See the docs: [https://near-transaction-manager.netlify.app/](https://near-trans
 2. create a `TransactionManager` instance:
 
 ```ts
+// create a TransactionManager from a NEAR Account
+const transactionManager = TransactionManager.fromAccount(account);
+```
+
+or
+
+```ts
 // create a TransactionManager from a NEAR WalletConnection
 const transactionManager = TransactionManager.fromWallet(wallet);
 ```
