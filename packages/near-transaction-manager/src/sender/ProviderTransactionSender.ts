@@ -8,17 +8,33 @@ import {
   TransactionSendOptions,
 } from "./TransactionSender";
 
-type ProviderTransactionSenderOptions = {
+export type ProviderTransactionSenderOptions = {
+  /**
+   * A NEAR Provider from `near-api-js`. For example, `JsonRpcProvider`.
+   */
   provider: Provider;
 };
 
-export default class ProviderTransactionSender implements TransactionSender {
+/**
+ * This is an implementation of {@link TransactionSender}. It is used to send
+ * transactions with a `Provider` from `near-api-js`.
+ *
+ *
+ * @example
+ * ```ts
+ * const transactionSender = new ProviderTransactionSender({ provider: near.connection.provider })
+ * ```
+ */
+export class ProviderTransactionSender implements TransactionSender {
   private provider: Provider;
 
   constructor({ provider }: ProviderTransactionSenderOptions) {
     this.provider = provider;
   }
 
+  /**
+   * @see {@link TransactionSender.send}
+   */
   async send({
     transactionOptions,
     transactionCreator,
@@ -29,6 +45,9 @@ export default class ProviderTransactionSender implements TransactionSender {
     return this.provider.sendTransaction(signedTransaction);
   }
 
+  /**
+   * @see {@link TransactionSender.bundleSend}
+   */
   async bundleSend({
     bundleTransactionOptions,
     transactionCreator,
@@ -36,10 +55,10 @@ export default class ProviderTransactionSender implements TransactionSender {
   }: TransactionBundleSendOptions): Promise<FinalExecutionOutcome[]> {
     const outcomes: FinalExecutionOutcome[] = [];
 
-    for (let transactionOptions of bundleTransactionOptions) {
+    for (let [i, transactionOptions] of bundleTransactionOptions.entries()) {
       outcomes.push(
         await this.send({
-          transactionOptions,
+          transactionOptions: { ...transactionOptions, nonceOffset: i + 1 },
           transactionCreator,
           transactionSigner,
         })
