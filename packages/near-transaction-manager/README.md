@@ -1,6 +1,8 @@
 # NEAR TransactionManager
 
-This library is a utility for creating, signing, and sending transactions. Currently it is a wrapper around `near-api-js`
+This library is a utility for creating, signing, and sending transactions. Currently it is a wrapper around `near-api-js`.
+
+See the docs: [https://near-transaction-manager.netlify.app/](https://near-transaction-manager.netlify.app/)
 
 ## Getting Started
 
