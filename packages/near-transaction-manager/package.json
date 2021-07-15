@@ -1,0 +1,21 @@
+{
+  "name": "near-transaction-mangager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "borsh": "near/borsh-js#master",
+    "near-api-js": "^0.42.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.24",
+    "just": "^0.1.8",
+    "typescript": "^4.3.5"
+  }
+}
