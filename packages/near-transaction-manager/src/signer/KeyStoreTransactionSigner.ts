@@ -79,16 +79,17 @@ export class KeyStoreTransactionSigner implements TransactionSigner {
    * Create an instance of `KeyStoreTransactionSigner` from a NEAR `Account`.
    */
   static fromAccount(account: Account): KeyStoreTransactionSigner {
-    if (!(account.connection.signer instanceof InMemorySigner)) {
+    if (account.connection.signer.constructor.name !== "InMemorySigner") {
       throw new Error(
         "Account doesn't use an InMemorySigner. No key store can be found."
       );
     }
 
+    const { keyStore } = account.connection.signer as unknown as InMemorySigner;
     return new KeyStoreTransactionSigner({
+      keyStore,
       signerId: account.accountId,
       networkId: account.connection.networkId,
-      keyStore: account.connection.signer.keyStore,
     });
   }
 
