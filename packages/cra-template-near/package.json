@@ -1,0 +1,23 @@
+{
+  "name": "cra-template-near",
+  "version": "0.0.1",
+  "keywords": [
+    "react",
+    "create-react-app",
+    "template"
+  ],
+  "description": "Template used to start NEAR React applications with Create React App",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mehtaphysical/near-js.git",
+    "directory": "packages/cra-template-near"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=14"
+  },
+  "files": [
+    "template",
+    "template.json"
+  ]
+}
