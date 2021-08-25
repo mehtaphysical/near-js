@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useNear, useNearWallet, useNearContract } from "near-react-hooks";
+import { NearSignin } from "near-react-hooks";
 
 export default function App() {
   const near = useNear();
@@ -15,5 +15,5 @@ export default function App() {
 
   if (!wallet.isSignedIn()) return null;
 
-  return <h1>{wallet.getAccountId()}</h1>;
+  return <NearSignin contractId="wrap.near" />;
 }
