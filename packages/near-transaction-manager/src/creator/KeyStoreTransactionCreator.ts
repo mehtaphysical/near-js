@@ -116,12 +116,6 @@ export class KeyStoreTransactionCreator implements TransactionCreator {
    * Create an instance of `KeyStoreTransactionCreator` from a NEAR `Account`.
    */
   static fromAccount(account: Account): KeyStoreTransactionCreator {
-    if (account.connection.signer.constructor.name !== "InMemorySigner") {
-      throw new Error(
-        "Account doesn't use an InMemorySigner. No key store can be found."
-      );
-    }
-
     const { keyStore } = account.connection.signer as unknown as InMemorySigner;
     return new KeyStoreTransactionCreator({
       keyStore,
